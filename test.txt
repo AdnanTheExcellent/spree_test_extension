@@ -1,0 +1,285 @@
+Activating MgxcopyBinaryAssets extension...
+...........*.........*........................F.......................................................*.*.*.*.........................**.................................................F*......................................FF..........*.............................................***F.......................................................................................................................................................FF.........F.....F...................FFFFFFFFFF..FF......FFFFF.FFF..........................*..*.F...............................................................................F...................................................
+
+Pending:
+  Spree::Address validation address_requires_state preference is false
+    # Broken on CI server, but not on dev machines. To be investigated later.
+    # ./spec/models/address_spec.rb:105
+  Spree::Adjustment should accept a negative amount
+    # Not yet implemented
+    # ./spec/models/adjustment_spec.rb:7
+  Spree::InventoryUnit#increase when :track_inventory_levels is false should decrement count_on_hand
+    # No reason given
+    # ./spec/models/inventory_unit_spec.rb:49
+  Spree::InventoryUnit#increase when :create_inventory_units is false should not create units
+    # No reason given
+    # ./spec/models/inventory_unit_spec.rb:76
+  Spree::InventoryUnit#decrease when :track_inventory_levels is false should decrement count_on_hand
+    # No reason given
+    # ./spec/models/inventory_unit_spec.rb:106
+  Spree::InventoryUnit#decrease when :create_inventory_units is false should destroy units
+    # No reason given
+    # ./spec/models/inventory_unit_spec.rb:133
+  Spree::LineItem (in)sufficient_stock? when backordering is disabled should report insufficient stock when variant is out of stock
+    # No reason given
+    # ./spec/models/line_item_spec.rb:143
+  Spree::LineItem (in)sufficient_stock? when backordering is disabled should report insufficient stock when variant has less on_hand that line_item quantity
+    # No reason given
+    # ./spec/models/line_item_spec.rb:150
+  Spree::Order#cancel should change shipment status (unless shipped)
+    # Not yet implemented
+    # ./spec/models/order/state_machine_spec.rb:191
+  Spree::Order#backordered? should always be false when inventory tracking is disabled
+    # No reason given
+    # ./spec/models/order_spec.rb:216
+  Spree::PaymentMethod#available should return all methods available to front-end/back-end when display_on = :both
+    # No reason given
+    # ./spec/models/payment_method_spec.rb:19
+  Spree::PaymentMethod#available should return all methods available to front-end when display_on = :front_end
+    # No reason given
+    # ./spec/models/payment_method_spec.rb:24
+  Spree::PaymentMethod#available should return all methods available to back-end when display_on = :back_end
+    # No reason given
+    # ./spec/models/payment_method_spec.rb:29
+  Spree::Shipment when track_inventory is false should not use the line items from order when track_inventory_levels is false
+    # No reason given
+    # ./spec/models/shipment_spec.rb:99
+  Spree::Shipment when order is completed without inventory tracking should validate with no inventory
+    # No reason given
+    # ./spec/models/shipment_spec.rb:135
+
+Failures:
+
+  1) Spree::Calculator::DefaultTax#compute when tax is not included in price when the variant matches the tax category should be equal to the item total * rate
+     Failure/Error: calculator.compute(line_item_1).should == 1.50
+       expected: 1.5
+            got: #<BigDecimal:d381514,'0.143E1',18(54)> (using ==)
+     # ./spec/models/calculator/default_tax_spec.rb:75:in `block (5 levels) in <top (required)>'
+
+  2) Spree::Order#cancel should send a cancel email
+     Failure/Error: order_id.should == order.id
+       expected: 1
+            got: #<Spree::Order id: 1, number: "R112482302", item_total: #<BigDecimal:b51d870,'0.0',9(18)>, total: #<BigDecimal:b51d5c8,'0.0',9(18)>, state: "canceled", adjustment_total: #<BigDecimal:b51d168,'0.0',9(18)>, user_id: nil, created_at: "2013-06-06 18:01:47", updated_at: "2013-06-06 18:01:47", completed_at: nil, bill_address_id: nil, ship_address_id: nil, payment_total: #<BigDecimal:b51c650,'0.0',9(18)>, shipping_method_id: nil, shipment_state: nil, payment_state: "credit_owed", email: nil, special_instructions: nil> (using ==)
+     # ./spec/models/order/state_machine_spec.rb:142:in `block (3 levels) in <top (required)>'
+
+  3) Spree::Order#finalize! should send an order confirmation email
+     Failure/Error: Spree::OrderMailer.should_receive(:confirm_email).with(order.id).and_return mail_message
+       (<Spree::OrderMailer (class)>).confirm_email(1)
+           expected: 1 time
+           received: 0 times
+     # ./spec/models/order_spec.rb:125:in `block (3 levels) in <top (required)>'
+
+  4) Spree::Order#finalize! should continue even if confirmation email delivery fails
+     Failure/Error: Spree::OrderMailer.should_receive(:confirm_email).with(order.id).and_raise 'send failed!'
+       (<Spree::OrderMailer (class)>).confirm_email(1)
+           expected: 1 time
+           received: 0 times
+     # ./spec/models/order_spec.rb:131:in `block (3 levels) in <top (required)>'
+
+  5) Spree::Payment does not stack level too deep when asked for gateway options
+     Failure/Error: order = stub_model(Order, :promo_total => 1)
+     NameError:
+       uninitialized constant Order
+     # ./spec/models/payment_spec.rb:554:in `block (2 levels) in <top (required)>'
+
+  6) Spree::Promotion::Actions::CreateAdjustment#perform should create a discount with correct negative amount
+     Failure/Error: let(:promotion) { create(:promotion) }
+     NoMethodError:
+       undefined method `usage_limit' for #<Spree::Promotion:0xe45834c>
+     # ./spec/models/promotion/actions/create_adjustment_spec.rb:5:in `block (2 levels) in <top (required)>'
+     # ./spec/models/promotion/actions/create_adjustment_spec.rb:12:in `block (3 levels) in <top (required)>'
+
+  7) Spree::Promotion::Actions::CreateAdjustment#perform should not create a discount when order already has one from this promotion
+     Failure/Error: let(:promotion) { create(:promotion) }
+     NoMethodError:
+       undefined method `usage_limit' for #<Spree::Promotion:0xbdaf114>
+     # ./spec/models/promotion/actions/create_adjustment_spec.rb:5:in `block (2 levels) in <top (required)>'
+     # ./spec/models/promotion/actions/create_adjustment_spec.rb:12:in `block (3 levels) in <top (required)>'
+
+  8) Spree::Promotion::Rules::UserLoggedIn#eligible?(order) should be eligible if user is logged in
+     Failure/Error: rule.should be_eligible(order)
+       expected eligible?(#<Spree::Order id: nil, number: nil, item_total: #<BigDecimal:b51d870,'0.0',9(18)>, total: #<BigDecimal:b51d5c8,'0.0',9(18)>, state: "cart", adjustment_total: #<BigDecimal:b51d168,'0.0',9(18)>, user_id: nil, created_at: nil, updated_at: nil, completed_at: nil, bill_address_id: nil, ship_address_id: nil, payment_total: #<BigDecimal:b51c650,'0.0',9(18)>, shipping_method_id: nil, shipment_state: nil, payment_state: nil, email: nil, special_instructions: nil>) to return true, got nil
+     # ./spec/models/promotion/promotion/rules/user_logged_in_spec.rb:13:in `block (3 levels) in <top (required)>'
+
+  9) Spree::Promotion::Rules::FirstOrder first order for a signed user with completed orders should not be eligible with another order
+     Failure/Error: rule.should_not be_eligible(order)
+       expected eligible?(#<Spree::Order:0x7284d42 @name="Spree::Order_1570">) to return false, got true
+     # ./spec/models/promotion/rules/first_order_spec.rb:41:in `block (5 levels) in <top (required)>'
+
+  10) Spree::Promotion validations valid_promotion is valid
+     Failure/Error: @valid_promotion = Spree::Promotion.new :name => "A promotion",
+     ActiveRecord::UnknownAttributeError:
+       unknown attribute: code
+     # ./spec/models/promotion_spec.rb:8:in `new'
+     # ./spec/models/promotion_spec.rb:8:in `block (3 levels) in <top (required)>'
+
+  11) Spree::Promotion validations validates the coupon code when event is spree.checkout.coupon_code_added
+     Failure/Error: @valid_promotion = Spree::Promotion.new :name => "A promotion",
+     ActiveRecord::UnknownAttributeError:
+       unknown attribute: code
+     # ./spec/models/promotion_spec.rb:8:in `new'
+     # ./spec/models/promotion_spec.rb:8:in `block (3 levels) in <top (required)>'
+
+  12) Spree::Promotion validations validates the path when event is spree.content.visited
+     Failure/Error: @valid_promotion = Spree::Promotion.new :name => "A promotion",
+     ActiveRecord::UnknownAttributeError:
+       unknown attribute: code
+     # ./spec/models/promotion_spec.rb:8:in `new'
+     # ./spec/models/promotion_spec.rb:8:in `block (3 levels) in <top (required)>'
+
+  13) Spree::Promotion validations validates usage limit
+     Failure/Error: @valid_promotion = Spree::Promotion.new :name => "A promotion",
+     ActiveRecord::UnknownAttributeError:
+       unknown attribute: code
+     # ./spec/models/promotion_spec.rb:8:in `new'
+     # ./spec/models/promotion_spec.rb:8:in `block (3 levels) in <top (required)>'
+
+  14) Spree::Promotion validations validates name
+     Failure/Error: @valid_promotion = Spree::Promotion.new :name => "A promotion",
+     ActiveRecord::UnknownAttributeError:
+       unknown attribute: code
+     # ./spec/models/promotion_spec.rb:8:in `new'
+     # ./spec/models/promotion_spec.rb:8:in `block (3 levels) in <top (required)>'
+
+  15) Spree::Promotion.advertised only shows advertised promotions
+     Failure/Error: let(:advertised_promotion) { create(:promotion, :advertise => true) }
+     NoMethodError:
+       undefined method `advertise=' for #<Spree::Promotion:0xbdc9ba4>
+     # ./spec/models/promotion_spec.rb:47:in `block (3 levels) in <top (required)>'
+     # ./spec/models/promotion_spec.rb:51:in `block (3 levels) in <top (required)>'
+
+  16) Spree::Promotion#delete deletes actions
+     Failure/Error: p = Spree::Promotion.create(:name => "delete me")
+     NoMethodError:
+       undefined method `usage_limit' for #<Spree::Promotion:0xe1f8bec>
+     # ./spec/models/promotion_spec.rb:58:in `block (3 levels) in <top (required)>'
+
+  17) Spree::Promotion#delete deletes rules
+     Failure/Error: p = Spree::Promotion.create(:name => "delete me")
+     NoMethodError:
+       undefined method `usage_limit' for #<Spree::Promotion:0xbd799ec>
+     # ./spec/models/promotion_spec.rb:66:in `block (3 levels) in <top (required)>'
+
+  18) Spree::Promotion#activate should check code if present
+     Failure/Error: promotion.code = 'XXX'
+     NoMethodError:
+       undefined method `code=' for #<Spree::Promotion:0xe25bfe4>
+     # ./spec/models/promotion_spec.rb:88:in `block (3 levels) in <top (required)>'
+
+  19) Spree::Promotion#activate should check path if present
+     Failure/Error: promotion.path = 'content/cvv'
+     NoMethodError:
+       undefined method `path=' for #<Spree::Promotion:0xd2ec9a0>
+     # ./spec/models/promotion_spec.rb:96:in `block (3 levels) in <top (required)>'
+
+  20) Spree::Promotion#usage_limit_exceeded should not have its usage limit exceeded
+     Failure/Error: promotion.should_not be_usage_limit_exceeded
+     NameError:
+       undefined local variable or method `usage_limit' for #<Spree::Promotion:0xe50437c>
+     # ./spec/models/promotion_spec.rb:125:in `block (3 levels) in <top (required)>'
+
+  21) Spree::Promotion#usage_limit_exceeded should have its usage limit exceeded
+     Failure/Error: promotion.usage_limit = 2
+     NoMethodError:
+       undefined method `usage_limit=' for #<Spree::Promotion:0xbd77dcc>
+     # ./spec/models/promotion_spec.rb:129:in `block (3 levels) in <top (required)>'
+
+  22) Spree::Promotion#expired should not be expired if usage limit is not exceeded
+     Failure/Error: promotion.usage_limit = 2
+     NoMethodError:
+       undefined method `usage_limit=' for #<Spree::Promotion:0xd1ee3c8>
+     # ./spec/models/promotion_spec.rb:170:in `block (3 levels) in <top (required)>'
+
+  23) Spree::Promotion#products when it has product rules with products associated should have products
+     Failure/Error: let(:promotion) { create(:promotion) }
+     NoMethodError:
+       undefined method `usage_limit' for #<Spree::Promotion:0xdef5e90>
+     # ./spec/models/promotion_spec.rb:178:in `block (4 levels) in <top (required)>'
+     # ./spec/models/promotion_spec.rb:182:in `block (4 levels) in <top (required)>'
+
+  24) Spree::Promotion#eligible? when it is expired 
+     Failure/Error: promotion.code = "XXX"
+     NoMethodError:
+       undefined method `code=' for #<Spree::Promotion:0xdd58178>
+     # ./spec/models/promotion_spec.rb:198:in `block (3 levels) in <top (required)>'
+
+  25) Spree::Promotion#eligible? when it is not expired 
+     Failure/Error: promotion.code = "XXX"
+     NoMethodError:
+       undefined method `code=' for #<Spree::Promotion:0xe5a301c>
+     # ./spec/models/promotion_spec.rb:198:in `block (3 levels) in <top (required)>'
+
+  26) Spree::Promotion#eligible? when a coupon code has already resulted in an adjustment on the order should be eligible
+     Failure/Error: promotion.code = "XXX"
+     NoMethodError:
+       undefined method `code=' for #<Spree::Promotion:0xe50de2c>
+     # ./spec/models/promotion_spec.rb:198:in `block (3 levels) in <top (required)>'
+
+  27) Spree::Promotion rules with 'all' match policy should have eligible rules if all rules are eligible
+     Failure/Error: before { promotion.match_policy = 'all' }
+     NoMethodError:
+       undefined method `match_policy=' for #<Spree::Promotion:0xd422310>
+     # ./spec/models/promotion_spec.rb:241:in `block (4 levels) in <top (required)>'
+
+  28) Spree::Promotion rules with 'all' match policy should not have eligible rules if any of the rules is not eligible
+     Failure/Error: before { promotion.match_policy = 'all' }
+     NoMethodError:
+       undefined method `match_policy=' for #<Spree::Promotion:0xe50ac18>
+     # ./spec/models/promotion_spec.rb:241:in `block (4 levels) in <top (required)>'
+
+  29) Spree::Promotion rules with 'any' match policy should have eligible rules if any of the rules is eligible
+     Failure/Error: @promotion = Spree::Promotion.new(:name => "Promo", :match_policy => 'any')
+     ActiveRecord::UnknownAttributeError:
+       unknown attribute: match_policy
+     # ./spec/models/promotion_spec.rb:258:in `new'
+     # ./spec/models/promotion_spec.rb:258:in `block (4 levels) in <top (required)>'
+
+  30) Spree::Shipment#ship should send a shipment email
+     Failure/Error: shipment_id.should == shipment.id
+       expected: 1
+            got: #<Spree::Shipment id: 1, tracking: nil, number: "H27413676824", cost: nil, shipped_at: "2013-06-06 18:03:07", order_id: 1674, shipping_method_id: 1675, address_id: nil, created_at: "2013-06-06 18:03:07", updated_at: "2013-06-06 18:03:07", state: "shipped", shipping_days: nil, original_delivery_date: nil, current_delivery_date: nil, original_delivery_date_string: nil, zipcode: nil, quote_state: nil, time_of_day_id: nil> (using ==)
+     # ./spec/models/shipment_spec.rb:168:in `block (3 levels) in <top (required)>'
+
+  31) Spree::Variant recalculates product's count_on_hnad when saved (non-master)
+     Failure/Error: variant.product.should_receive(:on_hand).and_return(3)
+       (#<Spree::Product:0xe6cb728>).on_hand(any args)
+           expected: 1 time
+           received: 0 times
+     # ./spec/models/variant_spec.rb:31:in `block (2 levels) in <top (required)>'
+
+Finished in 2 minutes 57.33 seconds
+667 examples, 31 failures, 15 pending
+
+Failed examples:
+
+rspec ./spec/models/calculator/default_tax_spec.rb:74 # Spree::Calculator::DefaultTax#compute when tax is not included in price when the variant matches the tax category should be equal to the item total * rate
+rspec ./spec/models/order/state_machine_spec.rb:130 # Spree::Order#cancel should send a cancel email
+rspec ./spec/models/order_spec.rb:123 # Spree::Order#finalize! should send an order confirmation email
+rspec ./spec/models/order_spec.rb:130 # Spree::Order#finalize! should continue even if confirmation email delivery fails
+rspec ./spec/models/payment_spec.rb:553 # Spree::Payment does not stack level too deep when asked for gateway options
+rspec ./spec/models/promotion/actions/create_adjustment_spec.rb:16 # Spree::Promotion::Actions::CreateAdjustment#perform should create a discount with correct negative amount
+rspec ./spec/models/promotion/actions/create_adjustment_spec.rb:26 # Spree::Promotion::Actions::CreateAdjustment#perform should not create a discount when order already has one from this promotion
+rspec ./spec/models/promotion/promotion/rules/user_logged_in_spec.rb:9 # Spree::Promotion::Rules::UserLoggedIn#eligible?(order) should be eligible if user is logged in
+rspec ./spec/models/promotion/rules/first_order_spec.rb:39 # Spree::Promotion::Rules::FirstOrder first order for a signed user with completed orders should not be eligible with another order
+rspec ./spec/models/promotion_spec.rb:13 # Spree::Promotion validations valid_promotion is valid
+rspec ./spec/models/promotion_spec.rb:17 # Spree::Promotion validations validates the coupon code when event is spree.checkout.coupon_code_added
+rspec ./spec/models/promotion_spec.rb:22 # Spree::Promotion validations validates the path when event is spree.content.visited
+rspec ./spec/models/promotion_spec.rb:30 # Spree::Promotion validations validates usage limit
+rspec ./spec/models/promotion_spec.rb:38 # Spree::Promotion validations validates name
+rspec ./spec/models/promotion_spec.rb:49 # Spree::Promotion.advertised only shows advertised promotions
+rspec ./spec/models/promotion_spec.rb:57 # Spree::Promotion#delete deletes actions
+rspec ./spec/models/promotion_spec.rb:65 # Spree::Promotion#delete deletes rules
+rspec ./spec/models/promotion_spec.rb:87 # Spree::Promotion#activate should check code if present
+rspec ./spec/models/promotion_spec.rb:95 # Spree::Promotion#activate should check path if present
+rspec ./spec/models/promotion_spec.rb:124 # Spree::Promotion#usage_limit_exceeded should not have its usage limit exceeded
+rspec ./spec/models/promotion_spec.rb:128 # Spree::Promotion#usage_limit_exceeded should have its usage limit exceeded
+rspec ./spec/models/promotion_spec.rb:169 # Spree::Promotion#expired should not be expired if usage limit is not exceeded
+rspec ./spec/models/promotion_spec.rb:187 # Spree::Promotion#products when it has product rules with products associated should have products
+rspec ./spec/models/promotion_spec.rb:207 # Spree::Promotion#eligible? when it is expired 
+rspec ./spec/models/promotion_spec.rb:213 # Spree::Promotion#eligible? when it is not expired 
+rspec ./spec/models/promotion_spec.rb:226 # Spree::Promotion#eligible? when a coupon code has already resulted in an adjustment on the order should be eligible
+rspec ./spec/models/promotion_spec.rb:243 # Spree::Promotion rules with 'all' match policy should have eligible rules if all rules are eligible
+rspec ./spec/models/promotion_spec.rb:249 # Spree::Promotion rules with 'all' match policy should not have eligible rules if any of the rules is not eligible
+rspec ./spec/models/promotion_spec.rb:262 # Spree::Promotion rules with 'any' match policy should have eligible rules if any of the rules is eligible
+rspec ./spec/models/shipment_spec.rb:159 # Spree::Shipment#ship should send a shipment email
+rspec ./spec/models/variant_spec.rb:28 # Spree::Variant recalculates product's count_on_hnad when saved (non-master)
